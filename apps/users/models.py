@@ -12,7 +12,7 @@ from django.contrib.auth.models import AbstractUser
 class UserProfile(AbstractUser): # AbstractUser 作为一个抽象基类`abstract=True`
     nick_name = models.CharField(max_length=50, verbose_name=_('Nick Name'))
     birthday = models.DateField(verbose_name=_('Birthday'), null=True, blank=True)
-    gender = models.CharField(max_length=20, default='male',
+    gender = models.CharField(max_length=6, default='male',
                               choices=(('male', _('Male')), ('female', _('Female'))))
     address = models.CharField(max_length=200, null=True, blank=True)
     mobile = models.CharField(max_length=11, null=True, blank=True)
@@ -30,8 +30,8 @@ class EmailVerifyRecord(models.Model):
     """邮箱注册、找回密码生成邮箱验证码"""
     code = models.CharField(max_length=20, verbose_name=_('Verification Code'))
     email = models.EmailField(max_length=50, verbose_name=_('Email'))
-    send_type = models.CharField(max_length=10, choices=(('register', _('Register')), ('forget', _('Forget Password'))))
-    send_time = models.DateTimeField(default=datetime.now)
+    send_type = models.CharField(max_length=20, choices=(('register', _('Register')), ('forget', _('Forget Password'))), verbose_name=_('Code Type'))
+    send_time = models.DateTimeField(default=datetime.now, verbose_name=_('Send Time'))
 
     class Meta:
         verbose_name = _('Email Verification Code')
