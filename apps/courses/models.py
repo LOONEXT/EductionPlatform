@@ -29,6 +29,9 @@ class Course(models.Model):
         verbose_name = _('Course')
         verbose_name_plural = verbose_name
 
+    def __unicode__(self):
+        return self.name
+
 
 class Lesson(models.Model):
     """章节表"""
@@ -40,11 +43,17 @@ class Lesson(models.Model):
         verbose_name = _('Lesson')
         verbose_name_plural = verbose_name
 
+    def __unicode__(self):
+        return self.name
+
 class Video(models.Model):
     """视频表"""
     lesson = models.ForeignKey(Lesson, verbose_name=_('Lession'))
     name = models.CharField(max_length=100, verbose_name=_('Viedo Name'))
     add_time = models.DateTimeField(default=datetime.now, verbose_name=_('Add Time'))
+
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         verbose_name = _('Video')
@@ -60,4 +69,3 @@ class CourseResource(models.Model):
     class Meta:
         verbose_name = _('Course Resource')
         verbose_name_plural = verbose_name
-

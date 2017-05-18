@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'muxueonline.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mxonline',
+        'NAME': 'imooc_online',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost'

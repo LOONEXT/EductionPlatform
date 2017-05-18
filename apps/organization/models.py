@@ -16,6 +16,9 @@ class City(models.Model):
         verbose_name = _('City')
         verbose_name_plural = verbose_name
 
+    def __unicode__(self):
+        return self.name
+
 class CourseOrg(models.Model):
     """课程机构表"""
     name = models.CharField(max_length=50, verbose_name=_('Orgnazition Name'))
@@ -30,6 +33,9 @@ class CourseOrg(models.Model):
     class Meta:
         verbose_name = _('Orgnazition Info')
         verbose_name_plural = verbose_name
+
+    def __unicode__(self):
+        return self.name
 
 
 class Teacher(models.Model):
@@ -48,3 +54,6 @@ class Teacher(models.Model):
     class Meta:
         verbose_name = _('Teacher Info')
         verbose_name_plural = verbose_name
+
+    def __unicode__(self):
+        return self.name

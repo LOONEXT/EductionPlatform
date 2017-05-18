@@ -37,6 +37,10 @@ class EmailVerifyRecord(models.Model):
         verbose_name = _('Email Verification Code')
         verbose_name_plural = verbose_name
 
+    # 修改界面显示
+    def __unicode__(self):
+        return "{0}({1})".format(self.code, self.email)
+
 
 class Banner(models.Model):
     """首页轮播图数据库模型"""
