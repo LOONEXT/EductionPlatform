@@ -6,8 +6,10 @@ from django.contrib.auth.backends import ModelBackend
 from django.shortcuts import render
 # 完成并集操作
 from django.db.models import Q
+from django.views.generic.base import View
 
 from .models import UserProfile
+from .forms import LoginForm
 
 
 # 修改authenticate方法自定义登录方式
@@ -22,16 +24,38 @@ class CustomBackend(ModelBackend):
             return None
 
 
-def sign_in(request):
-    if request.method == "POST":
-        # 取前端提交的数据
-        user_name = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        # 验证用户名和密码,需指定参数名称
-        user = authenticate(username=user_name, password=password)
-        if user is not None:
-            login(request, user)
-            return render(request, 'index.html')
-        return render(request, 'login.html', {'msg': u'用户名或密码错误'})
-    elif request.method == "GET":
-        return render(request, "login.html", {})
+# 类视图定义法
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'login.html', {})
+
+    def post(self, request):
+        login_form = LoginForm(request.POST)
+        # 验证成功
+        if login_form.is_valid():
+            # 取前端提交的数据
+            user_name = request.POST.get('username', '')
+            password = request.POST.get('password', '')
+            # 验证用户名和密码,需指定参数名称
+            user = authenticate(username=user_name, password=password)
+            if user is not None:
+                login(request, user)
+                return render(request, 'index.html')
+            return render(request, 'index.html', {'msg': u'用户名或密码错误'})
+        return render(request, 'login.html', {'login_form': login_form})
+
+
+# 函数视图定义法
+# def sign_in(request):
+    # if request.method == "POST":
+        # # 取前端提交的数据
+        # user_name = request.POST.get('username', '')
+        # password = request.POST.get('password', '')
+        # # 验证用户名和密码,需指定参数名称
+        # user = authenticate(username=user_name, password=password)
+        # if user is not None:
+            # login(request, user)
+            # return render(request, 'index.html')
+        # return render(request, 'login.html', {'msg': u'用户名或密码错误'})
+    # elif request.method == "GET":
+        # return render(request, "login.html", {})
