@@ -3,13 +3,15 @@
 # django用户登录验证
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
+# 加密密码
+from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 # 完成并集操作
 from django.db.models import Q
 from django.views.generic.base import View
 
 from .models import UserProfile
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 
 
 # 修改authenticate方法自定义登录方式
@@ -44,6 +46,26 @@ class LoginView(View):
             return render(request, 'index.html', {'msg': u'用户名或密码错误'})
         return render(request, 'login.html', {'login_form': login_form})
 
+
+class RegisterView(View):
+    def get(self, request):
+        register_form = RegisterForm()
+        return render(request, 'register.html', {'register_form': register_form})
+
+    def post(self, request):
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            email = request.POST.get('email', '')
+            if UserProfile.objects.filter(email=email):
+                return render(request, 'register.html', {'register_form': register_form, 'msg': u'该邮箱已被注册！'})
+            password = request.POST.get('password', '')
+            user_profile = UserProfile()
+            user_profile.username = email
+            user_profile.email = email
+            user_profile.password = make_password(password)
+            user_profile.save()
+
+            return render(request, 'index.html')
 
 # 函数视图定义法
 # def sign_in(request):
