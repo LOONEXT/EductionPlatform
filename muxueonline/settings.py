@@ -142,3 +142,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+# 配置邮件发送
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'no_heart_no_lung@163.com'
+EMAIL_HOST_PASSWORD = 'zhao5461'
+EMAIL_USE_TLS = True
+EMAIL_FROM = 'no_heart_no_lung@163.com'

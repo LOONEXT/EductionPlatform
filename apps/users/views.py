@@ -10,8 +10,10 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.views.generic.base import View
 
-from .models import UserProfile
+from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm
+from operations.models import UserMessage
+from utils.email_send import send_register_email
 
 
 # 修改authenticate方法自定义登录方式
@@ -41,8 +43,10 @@ class LoginView(View):
             # 验证用户名和密码,需指定参数名称
             user = authenticate(username=user_name, password=password)
             if user is not None:
-                login(request, user)
-                return render(request, 'index.html')
+                if user.is_active:
+                    login(request, user)
+                    return render(request, 'index.html')
+                return render(request, 'login.html', {'msg': u'用户未激活!'})
             return render(request, 'index.html', {'msg': u'用户名或密码错误'})
         return render(request, 'login.html', {'login_form': login_form})
 
@@ -63,9 +67,30 @@ class RegisterView(View):
             user_profile.username = email
             user_profile.email = email
             user_profile.password = make_password(password)
+            user_profile.is_active = False
             user_profile.save()
 
-            return render(request, 'index.html')
+            user_message = UserMessage()
+            user_message.user = user_profile.id
+            user_message.message = u'欢迎注册慕学网！'
+            user_message.save()
+
+            send_register_email(email, 'register')
+            return render(request, 'login.html')
+        return render(request, 'register.html', {'register_form': register_form})
+
+
+class ActiveUserView(View):
+    def get(self, request, active_code):
+        all_records = EmailVerifyRecord.objects.get(code=active_code)
+        if all_records:
+            email = all_records.email
+            user = UserProfile.objects.get(email=email)
+            user.is_active = True
+            user.save()
+        return render(request, 'login.html')
+
+
 
 # 函数视图定义法
 # def sign_in(request):
