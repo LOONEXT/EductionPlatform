@@ -27,7 +27,7 @@ def send_register_email(email, send_type="register"):
 
     elif send_type == "forget":
         email_title = u"慕学网密码重置链接"
-        email_body = u"请点击以下链接重置你的密码: http://127.0.0.1:8000/reset/{}".format(code)
+        email_body = u"请点击以下链接重置你的密码: http://127.0.0.1:8000/resetpwd/{}".format(code)
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
 
         if send_status:

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """muxueonline URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -20,14 +21,22 @@ from django.views.generic import TemplateView
 import xadmin
 
 # from users import views
-from users.views import LoginView, RegisterView, ActiveUserView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, \
+    ResetPwdView, ModifyPwdView
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
+    # 验证码设置
     url(r'^captcha/', include('captcha.urls'), name='captcha'),
     url(r'^$', TemplateView.as_view(template_name="index.html"), name="index"),
-    # url(r'^login/', views.sign_in, name="login"),
+    # 登录
     url(r'^login/$', LoginView.as_view(), name='login'),
+    # 注册
     url(r'^register/$', RegisterView.as_view(), name='register'),
+    # 注册激活码
     url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name='active'),
+    # 重设密码激活码
+    url(r'^forget/$', ForgetPwdView.as_view(), name='forgetpwd'),
+    url(r'^resetpwd/(?P<active_code>.*)/$', ResetPwdView.as_view(), name='resetpwd'),
+    url(r'^modifypwd/$', ModifyPwdView.as_view(), name='modifypwd'),
 ]
