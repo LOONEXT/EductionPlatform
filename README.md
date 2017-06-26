@@ -1,0 +1,2 @@
+# EductionPlatform
+基于Django框架搭建的仿慕课网的教学网站
